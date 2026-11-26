@@ -141,7 +141,7 @@
       <section class="r-hero">
         <div class="r-media">
           <div class="r-photo">${img(id)}<a class="back-fab" href="#/" aria-label="Назад до рецептів"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a></div>
-          ${LOCAL.has(id) ? `<p class="credit">Ілюстрація створена ШІ для «Аерогриль»</p>` : i ? `<p class="credit">Фото: <a href="${esc(i.page)}" target="_blank" rel="noopener">${esc(i.by)}</a>, ${esc(i.lic)}, Wikimedia Commons</p>` : ""}
+          ${!LOCAL.has(id) && i ? `<p class="credit">Фото: <a href="${esc(i.page)}" target="_blank" rel="noopener">${esc(i.by)}</a>, ${esc(i.lic)}, Wikimedia Commons</p>` : ""}
         </div>
         <div class="r-head">
           <span class="card-cat">${esc(catName[r.cat])}</span>

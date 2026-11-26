@@ -1,3 +1,3 @@
 /* Рецепти, для яких є власне фото в img/dishes/<id>.jpg.
    Для них сайт показує це фото замість фото з Wikimedia Commons. */
-window.LOCAL_IMAGES = [];
+window.LOCAL_IMAGES = ["asparagus","bacon","baked-apples","baked-potato","breaded-fish","broccoli","brownie","brussels","burgers","cauliflower","chicken-breast","chicken-kyiv","chicken-legs","chicken-skewers","chicken-thighs-boneless","chicken-thighs","chicken-wings","chickpeas","cod","cookies","corn","croutons","deruny","drumsticks","eggplant","eggs","fish-sticks","fries-fresh","fries-frozen","frozen-dumplings","frozen-nuggets","frozen-pizza","frozen-veg","hasselback","mackerel","meatballs","muffins","mushrooms","new-potatoes","nuggets","omelette","pork-belly","pork-chops","pork-ribs","pork-shashlyk","potato-wedges","puff-pastry","reheat-pizza","salmon","sausages","shrimp","squid-rings","steak","sweet-potato-fries","syrnyky","toasts","veg-mix","whole-chicken","zapekanka","zucchini"];

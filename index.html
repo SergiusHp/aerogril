@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Аерогриль — рецепти з правильним часом і температурою</title>
+  <meta name="description" content="Рецепти для аерогрилю з часом і температурою за відгуками власників: курка, м'ясо, риба, картопля, овочі, десерти. Таймер, шпаргалка, меню.">
+  <meta name="theme-color" content="#FBF6EF">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Аерогриль">
+  <meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#/">
+      <span class="brand-mark" aria-hidden="true">А</span>
+      <span class="brand-text">Аерогриль<small>час і температура, що працюють</small></span>
+    </a>
+    <nav class="nav" aria-label="Розділи">
+      <a href="#/" data-nav="home">Рецепти</a>
+      <a href="#/cheat" data-nav="cheat">Шпаргалка</a>
+      <a href="#/menus" data-nav="menus">Меню</a>
+      <a href="#/settings" data-nav="settings" aria-label="Мій аерогриль">Мій гриль</a>
+    </nav>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <div id="timer" class="timer" hidden></div>
+
+  <footer class="footer">
+    <p>Час і температура — консенсус відгуків власників аерогрилів. Починайте перевіряти з нижньої межі діапазону. Птицю — термометром: 74 °C.</p>
+    <p>Фото: Wikimedia Commons, автор і ліцензія вказані на сторінці рецепта.</p>
+  </footer>
+
+  <script src="data/recipes.js"></script>
+  <script src="data/images.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

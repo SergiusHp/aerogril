@@ -32,9 +32,12 @@
     const txt = FR[frac] ? (whole ? whole + FR[frac] : FR[frac]) : String(v).replace(".", ",");
     return `${txt} ${unit}`.trim();
   }
+  // Власні фото (img/dishes/<id>.jpg) мають пріоритет над фото з Wikimedia Commons
+  const LOCAL = new Set(window.LOCAL_IMAGES || []);
+  const srcOf = id => LOCAL.has(id) ? `img/dishes/${id}.jpg` : IMG[id]?.src;
   const img = (id, cls = "") => {
-    const i = IMG[id];
-    return i ? `<img class="${cls}" src="${esc(i.src)}" alt="${esc(byId[id]?.title || "")}" loading="lazy" decoding="async" onerror="this.remove()">` : "";
+    const s = srcOf(id);
+    return s ? `<img class="${cls}" src="${esc(s)}" alt="${esc(byId[id]?.title || "")}" loading="lazy" decoding="async" onerror="this.remove()">` : "";
   };
   const lastPerfect = id => exps(id).find(e => e.result === "perfect");
   const searchIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>`;
@@ -46,14 +49,24 @@
     document.title = "Аерогриль — рецепти з правильним часом і температурою";
     app.innerHTML = `
       <section class="hero">
-        <h1>Час і температура, <em>як у реальних людей</em></h1>
-        <p>Цифри з відгуків власників аерогрилів, а не з інструкцій.<span class="hide-sm"> Стегна — за 25 хвилин, а не за 45.</span></p>
-        <label class="search"><span class="sr">Пошук рецептів</span>${searchIcon}
-          <input id="q" type="search" placeholder="Стегна, картопля, сир…" autocomplete="off" enterkeyhint="search" value="${esc(ui.q)}"></label>
+        <div class="hero-text">
+          <h1>Час і температура, <em>як у реальних людей</em></h1>
+          <p>Цифри з відгуків власників аерогрилів, а не з інструкцій.<span class="hide-sm"> ${R.length} ${plural(R.length, "рецепт", "рецепти", "рецептів")}, таймер і шпаргалка — усе під рукою біля плити.</span></p>
+          <label class="search"><span class="sr">Пошук рецептів</span>${searchIcon}
+            <input id="q" type="search" placeholder="Стегна, картопля, сир…" autocomplete="off" enterkeyhint="search" value="${esc(ui.q)}"></label>
+        </div>
+        <a class="hero-card" href="#/r/chicken-thighs" aria-label="Приклад: курячі стегна">
+          <div class="hc-img">${img("chicken-thighs")}</div>
+          <div class="hc-body">
+            <span class="hc-k">Приклад · курячі стегна</span>
+            <div class="hc-row was"><span>В інструкції</span><s>45 хв · 180 °C</s></div>
+            <div class="hc-row now"><span>Кажуть люди</span><b>22–28 хв · 200 °C</b></div>
+          </div>
+        </a>
       </section>
       <section class="cats" aria-label="Категорії">
         ${C.map(c => `<button class="cat" data-cat="${c.id}" aria-pressed="${ui.cat === c.id}">
-          <span class="cat-img">${IMG[c.img] ? `<img src="${esc(IMG[c.img].src)}" alt="" decoding="async" onerror="this.remove()">` : ""}</span>
+          <span class="cat-img">${srcOf(c.img) ? `<img src="${esc(srcOf(c.img))}" alt="" decoding="async" onerror="this.remove()">` : ""}</span>
           <span class="cat-name">${esc(c.short)}</span></button>`).join("")}
       </section>
       <div class="seg-time" role="group" aria-label="Скільки часу є">
@@ -128,7 +141,7 @@
       <section class="r-hero">
         <div class="r-media">
           <div class="r-photo">${img(id)}<a class="back-fab" href="#/" aria-label="Назад до рецептів"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a></div>
-          ${i ? `<p class="credit">Фото: <a href="${esc(i.page)}" target="_blank" rel="noopener">${esc(i.by)}</a>, ${esc(i.lic)}, Wikimedia Commons</p>` : ""}
+          ${LOCAL.has(id) ? `<p class="credit">Ілюстрація створена ШІ для «Аерогриль»</p>` : i ? `<p class="credit">Фото: <a href="${esc(i.page)}" target="_blank" rel="noopener">${esc(i.by)}</a>, ${esc(i.lic)}, Wikimedia Commons</p>` : ""}
         </div>
         <div class="r-head">
           <span class="card-cat">${esc(catName[r.cat])}</span>
@@ -221,7 +234,7 @@
     const s = document.createElement("script");
     s.type = "application/ld+json"; s.id = "ld";
     s.textContent = JSON.stringify({
-      "@context": "https://schema.org", "@type": "Recipe", name: r.title, image: IMG[r.id]?.src,
+      "@context": "https://schema.org", "@type": "Recipe", name: r.title, image: srcOf(r.id) && new URL(srcOf(r.id), location.href).href,
       recipeCategory: catName[r.cat], recipeYield: `${r.serv} порції`, cookTime: `PT${r.time[1]}M`, keywords: r.tags.join(", "),
       recipeIngredient: r.ing.map(([n, q, u]) => `${n} — ${qty(q, u, 1)}`),
       recipeInstructions: r.steps.map(t => ({ "@type": "HowToStep", text: t })),

@@ -1,5 +1,7 @@
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;touch-action:manipulation;overflow-x:clip}
+body{overflow-x:clip}
+input,select,textarea{font-size:max(16px,1em)}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--font-body);-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:inherit}

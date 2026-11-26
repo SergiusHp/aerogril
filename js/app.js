@@ -47,25 +47,35 @@
     app.innerHTML = `
       <section class="hero">
         <h1>Час і температура, <em>як у реальних людей</em></h1>
-        <p>Рецепти для аерогрилю з часом і температурою, на яких сходиться більшість відгуків власників, а не із завищеними цифрами з інструкцій. Стегна за 25 хвилин, а не за 45.</p>
+        <p>Цифри з відгуків власників аерогрилів, а не з інструкцій.<span class="hide-sm"> Стегна — за 25 хвилин, а не за 45.</span></p>
         <label class="search"><span class="sr">Пошук рецептів</span>${searchIcon}
-          <input id="q" type="search" placeholder="Стегна, картопля, лосось, сир…" autocomplete="off" value="${esc(ui.q)}"></label>
+          <input id="q" type="search" placeholder="Стегна, картопля, сир…" autocomplete="off" enterkeyhint="search" value="${esc(ui.q)}"></label>
       </section>
-      <div class="chips" role="group" aria-label="Категорії">
-        <button class="chip" data-cat="all" aria-pressed="${ui.cat === "all"}">Усі</button>
-        ${C.map(c => `<button class="chip" data-cat="${c.id}" aria-pressed="${ui.cat === c.id}">${esc(c.name)}</button>`).join("")}
-      </div>
-      <div class="filters" role="group" aria-label="Час приготування">
-        <span class="label">Час:</span>
+      <section class="cats" aria-label="Категорії">
+        ${C.map(c => `<button class="cat" data-cat="${c.id}" aria-pressed="${ui.cat === c.id}">
+          <span class="cat-img">${IMG[c.img] ? `<img src="${esc(IMG[c.img].src)}" alt="" decoding="async" onerror="this.remove()">` : ""}</span>
+          <span class="cat-name">${esc(c.short)}</span></button>`).join("")}
+      </section>
+      <div class="seg-time" role="group" aria-label="Скільки часу є">
         ${[[0, "Будь-який"], [12, "до 12 хв"], [20, "до 20 хв"], [30, "до 30 хв"]].map(([v, l]) =>
-          `<button class="chip small" data-tmax="${v}" aria-pressed="${ui.tmax === v}">${l}</button>`).join("")}
+          `<button data-tmax="${v}" aria-pressed="${ui.tmax === v}">${l}</button>`).join("")}
       </div>
-      <p class="count" id="count" aria-live="polite"></p>
+      <div class="results-head"><h2 id="rh" aria-live="polite"></h2><button class="reset" id="reset" hidden>Скинути ✕</button></div>
       <div class="grid" id="grid"></div>`;
     const q = app.querySelector("#q");
     q.addEventListener("input", () => { ui.q = q.value; renderGrid(); });
-    app.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { ui.cat = b.dataset.cat; syncPressed("[data-cat]", "cat"); renderGrid(); });
+    q.addEventListener("keydown", e => { if (e.key === "Enter") q.blur(); });
+    app.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => {
+      ui.cat = ui.cat === b.dataset.cat ? "all" : b.dataset.cat; syncPressed("[data-cat]", "cat"); renderGrid();
+      // на телефоні показати результат, якщо він нижче половини екрана
+      const rh = app.querySelector(".results-head"), top = rh.getBoundingClientRect().top;
+      if (ui.cat !== "all" && top > innerHeight * 0.55) window.scrollBy({ top: top - 70, behavior: "smooth" });
+    });
     app.querySelectorAll("[data-tmax]").forEach(b => b.onclick = () => { ui.tmax = +b.dataset.tmax; syncPressed("[data-tmax]", "tmax"); renderGrid(); });
+    app.querySelector("#reset").onclick = () => {
+      Object.assign(ui, { q: "", cat: "all", tmax: 0 }); q.value = "";
+      syncPressed("[data-cat]", "cat"); syncPressed("[data-tmax]", "tmax"); renderGrid();
+    };
     renderGrid();
   }
   function syncPressed(sel, key) {
@@ -85,19 +95,23 @@
     const lp = lastPerfect(r.id);
     return `<a class="card" href="#/r/${r.id}">
       <div class="card-img">${img(r.id)}
-        <div class="badges"><span class="badge hot">${r.temp}<small>°C</small></span><span class="badge">${range(r)}<small> хв</small></span></div>
+        <span class="pill"><b>${r.temp}°</b><span>${range(r)} хв</span></span>
       </div>
       <div class="card-body">
         <span class="card-cat">${esc(catName[r.cat])}</span>
         <h3>${esc(r.title)}</h3>
-        <span class="card-meta">${lp ? `✓ У вас ідеально: ${lp.time} хв / ${lp.temp} °C` : esc(r.tags.slice(0, 3).join(" · "))}</span>
+        <span class="card-meta">${lp ? `<span class="mine">✓ У вас: ${lp.time} хв</span>` : esc(r.tags.slice(0, 2).join(" · "))}</span>
       </div></a>`;
   }
   function renderGrid() {
     const list = filtered();
-    app.querySelector("#count").textContent = list.length ? `${list.length} ${plural(list.length, "рецепт", "рецепти", "рецептів")}` : "";
+    const c = C.find(x => x.id === ui.cat);
+    const title = ui.q.trim() ? "Знайдено" : !c ? "Усі рецепти"
+      : c.short === c.name ? esc(c.name) : `<span class="hide-sm">${esc(c.name)}</span><span class="show-sm">${esc(c.short)}</span>`;
+    app.querySelector("#rh").innerHTML = `${title} <span class="n">${list.length}</span>`;
+    app.querySelector("#reset").hidden = !(ui.q.trim() || ui.cat !== "all" || ui.tmax);
     app.querySelector("#grid").innerHTML = list.length ? list.map(card).join("")
-      : `<p class="empty">Нічого не знайшли. Спробуйте інше слово: «курка», «картопля», «сир».</p>`;
+      : `<p class="empty">Нічого не знайшли.<br>Спробуйте інше слово: «курка», «картопля», «сир».</p>`;
   }
   const plural = (n, a, b, c) => { const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
 
@@ -112,8 +126,8 @@
     app.innerHTML = `
       <a class="back" href="#/">← Усі рецепти</a>
       <section class="r-hero">
-        <div>
-          <div class="r-photo">${img(id)}</div>
+        <div class="r-media">
+          <div class="r-photo">${img(id)}<a class="back-fab" href="#/" aria-label="Назад до рецептів"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></a></div>
           ${i ? `<p class="credit">Фото: <a href="${esc(i.page)}" target="_blank" rel="noopener">${esc(i.by)}</a>, ${esc(i.lic)}, Wikimedia Commons</p>` : ""}
         </div>
         <div class="r-head">
@@ -123,13 +137,14 @@
           <div class="stats">
             <div class="stat main"><span class="k">Температура</span><span class="v">${r.temp}<small> °C</small></span></div>
             <div class="stat main"><span class="k">Час</span><span class="v">${range(r)}<small> хв</small></span>${lp ? `<span class="s">у вас: ${lp.time} хв</span>` : ""}</div>
-            <div class="stat"><span class="k">Розігрів</span><span class="v">${r.preheat ? "3<small> хв</small>" : "—"}</span><span class="s">${r.preheat ? "потрібен" : "не потрібен"}</span></div>
-            <div class="stat"><span class="k">Кошик</span><span class="s">${esc(r.load)}${smallBasket ? "<br><b>Малий кошик: половина, партіями</b>" : ""}</span></div>
+            <div class="stat mini"><span class="k">Розігрів</span><span class="s">${r.preheat ? "<b>3 хв</b>, потрібен" : "не потрібен"}</span></div>
+            <div class="stat mini"><span class="k">Кошик</span><span class="s">${esc(r.load)}${smallBasket ? "<br><b>Малий кошик: половина, партіями</b>" : ""}</span></div>
           </div>
           <div class="cta">
-            <button class="btn accent" id="start">▶ Таймер на ${adj(r.time[0])} хв</button>
+            <button class="btn accent" data-start>▶ Таймер на ${adj(r.time[0])} хв</button>
             <a class="btn ghost" href="#exp">Записати свій результат</a>
           </div>
+          <div class="dock"><button class="btn accent" data-start>▶ Таймер на ${adj(r.time[0])} хв · ${r.temp} °C</button></div>
         </div>
       </section>
 
@@ -180,7 +195,7 @@
     app.querySelector("#sp").onclick = () => { if (serv < 20) { serv++; renderIng(); } };
     renderIng();
 
-    app.querySelector("#start").onclick = () => Timer.start(r);
+    app.querySelectorAll("[data-start]").forEach(b => b.onclick = () => Timer.start(r));
 
     const renderHist = () => {
       const h = exps(id), L = { under: "недодержав", perfect: "ідеально", over: "пересушив" };
@@ -326,12 +341,12 @@
       if (a === "ack") { paused = false; end = Date.now() + left; draw(); }
       if (a === "plus1") { if (paused) left += 60000; else end += 60000; total += 60000; draw(); }
       if (a === "plus2") { end = Date.now() + 120000; total = 120000; halfDone = true; tick = setInterval(loop, 250); draw(); }
-      if (a === "stop") { clearInterval(tick); el.hidden = true; wake(false); }
+      if (a === "stop") { clearInterval(tick); el.hidden = true; document.body.classList.remove("timer-on"); wake(false); }
     });
     return {
       start(rec) {
         clearInterval(tick); r = rec; total = adj(rec.time[0]) * 60000; end = Date.now() + total;
-        paused = false; halfDone = false; el.hidden = false;
+        paused = false; halfDone = false; el.hidden = false; document.body.classList.add("timer-on");
         try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); ac.resume(); } catch {}
         wake(true); draw(); tick = setInterval(loop, 250);
       }

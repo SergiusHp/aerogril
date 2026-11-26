@@ -3,15 +3,16 @@
    time: [мін, макс] хвилин — перевіряти з нижньої межі.
    ing: [назва, кількість на serv порцій, одиниця]  (кількість 0 = «за смаком») */
 
+/* short — підпис на плитці категорії, img — рецепт, чиє фото показуємо на плитці */
 window.CATEGORIES = [
-  { id: "chicken", name: "Курка" },
-  { id: "meat", name: "М'ясо" },
-  { id: "fish", name: "Риба та морепродукти" },
-  { id: "potato", name: "Картопля" },
-  { id: "veg", name: "Овочі" },
-  { id: "frozen", name: "Заморожене" },
-  { id: "breakfast", name: "Сніданки та закуски" },
-  { id: "dessert", name: "Десерти" }
+  { id: "chicken", name: "Курка", short: "Курка", img: "chicken-thighs" },
+  { id: "meat", name: "М'ясо", short: "М'ясо", img: "steak" },
+  { id: "fish", name: "Риба та морепродукти", short: "Риба", img: "salmon" },
+  { id: "potato", name: "Картопля", short: "Картопля", img: "fries-fresh" },
+  { id: "veg", name: "Овочі", short: "Овочі", img: "brussels" },
+  { id: "frozen", name: "Заморожене", short: "Заморожене", img: "frozen-dumplings" },
+  { id: "breakfast", name: "Сніданки та закуски", short: "Сніданки", img: "syrnyky" },
+  { id: "dessert", name: "Десерти", short: "Десерти", img: "brownie" }
 ];
 
 window.RECIPES = [

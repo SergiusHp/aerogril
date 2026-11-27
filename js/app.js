@@ -56,7 +56,8 @@
   }
   // Власні фото (img/dishes/<id>.jpg) мають пріоритет над фото з Wikimedia Commons
   const LOCAL = new Set(window.LOCAL_IMAGES || []);
-  const srcOf = id => LOCAL.has(id) ? `img/dishes/${id}.jpg` : IMG[id]?.src;
+  const IV = window.IMG_VERSION || {};
+  const srcOf = id => LOCAL.has(id) ? `img/dishes/${id}.jpg${IV[id] ? "?v=" + IV[id] : ""}` : IMG[id]?.src;
   const img = (id, cls = "") => {
     const s = srcOf(id);
     return s ? `<img class="${cls}" src="${esc(s)}" alt="${esc(byId[id]?.title || "")}" loading="lazy" decoding="async" onerror="this.remove()">` : "";

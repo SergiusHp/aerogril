@@ -64,7 +64,7 @@ oversaturated, blurry, burnt, messy table, dark moody background, raw meat
 | 13 | Ковбаски для смаження | `sausages.jpg` | Five plump browned pork sausages with blistered skin, grainy mustard and pickles on the side. |
 | 14 | Свинячі реберця в соусі | `pork-ribs.jpg` | Glossy sticky barbecue pork ribs cut into portions, caramelised sauce, sprinkle of chopped parsley. |
 | 15 | Яловичий стейк | `steak.jpg` | Ribeye steak sliced to show a perfect medium-rare pink centre, melting herb butter on top, flaky sea salt. |
-| 16 | Котлети для бургерів | `burgers.jpg` | Two thick beef burger patties with melted cheddar on top, toasted brioche buns, lettuce and tomato nearby, juicy and glistening. |
+| 16 | Котлети для бургерів | `burgers.jpg` | Three thick flat homemade beef burger patties (150 g each, 2 cm thick) fresh from the air fryer, with straight even sides and a flat top (not domed). In the centre of each patty a shallow round thumb dimple is still clearly visible as a gentle depression. The patty in front has NO cheese, so the dimple and the deeply browned seared crust are in focus. One patty in the back has a single slice of cheddar just melting at the edges. Glistening juices, flaky salt, a few twists of black pepper. No buns, no lettuce, no tomato. |
 | 17 | Хрустка свиняча грудинка кубиками | `pork-belly.jpg` | Crispy pork belly cubes with crackling golden skin, bowl of soy dipping sauce, sliced chilli. |
 | 18 | Бекон хрусткий | `bacon.jpg` | Strips of perfectly crisp bacon arranged on a plate, deep reddish-brown and rippled. |
 | 19 | Шашлик зі свинячої шиї | `pork-shashlyk.jpg` | Ukrainian-style pork neck shashlik chunks with charred edges, raw red onion rings, fresh dill, flatbread lavash underneath. |
@@ -171,3 +171,29 @@ oversaturated, blurry, burnt, messy table, dark moody background, raw meat
 | 70 | Слойки з яблуками | `apple-turnovers.jpg` | Golden puff pastry apple turnovers triangle-shaped with fork-pressed edges and two slits on top, a bit of caramelised apple filling peeking out, dusted with powdered sugar. |
 | 71 | Банановий хліб | `banana-bread.jpg` | Moist banana bread loaf with a cracked golden-brown top, two thick slices cut showing walnuts inside, a fresh banana beside it. |
 | 72 | Бананові пончики-кульки | `banana-donuts.jpg` | Small round banana donut holes rolled in cinnamon sugar, piled in a bowl, one broken open showing fluffy interior. |
+
+## 6. Заміна: котлети для бургерів
+
+Старе фото не відповідало рецепту: там опуклі котлети під сиром, а ямки не видно.
+
+- **Файл:** `burgers.jpg`. Покладіть його в `img/dishes/` поверх старого (замінити).
+- Потім напишіть **«продовж»**.
+
+Готовий промпт, копіюйте цілком:
+
+```
+Editorial food photography for a modern cookbook, landscape 4:3.
+The dish was freshly cooked in an air fryer and is served on a matte off-white stoneware plate
+on a warm cream linen tablecloth (soft beige, #FBF6EF tones). Camera at a 45-degree
+three-quarter angle, 50mm lens, shallow depth of field. Soft natural daylight from the left,
+gentle soft shadows. Warm appetizing palette with subtle terracotta and olive-green accents
+(a small terracotta ramekin or a sprig of fresh herbs as the only props).
+The food sits in the centre with generous empty margins on all sides, so the image can be
+cropped to a square or a circle. Hyper-realistic textures, golden crispy surfaces,
+light steam where the food is hot. No text, no logos, no watermark, no people, no hands,
+no air fryer appliance in the frame.
+
+Three thick flat homemade beef burger patties (150 g each, 2 cm thick) fresh from the air fryer, with straight even sides and a flat top (not domed). In the centre of each patty a shallow round thumb dimple is still clearly visible as a gentle depression. The patty in front has NO cheese, so the dimple and the deeply browned seared crust are in focus. One patty in the back has a single slice of cheddar just melting at the edges. Glistening juices, flaky salt, a few twists of black pepper. No buns, no lettuce, no tomato.
+```
+
+Негативний промпт: `buns, bread, lettuce, tomato, domed rounded patty, meatball shape, cheese covering everything, raw meat, text, watermark, hands`

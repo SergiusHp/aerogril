@@ -11,7 +11,7 @@ window.CATEGORIES = [
   { id: "potato", name: "Картопля", short: "Картопля", img: "fries-fresh" },
   { id: "veg", name: "Овочі", short: "Овочі", img: "brussels" },
   { id: "frozen", name: "Заморожене", short: "Заморожене", img: "frozen-dumplings" },
-  { id: "breakfast", name: "Сніданки та перекуси", short: "Перекуси", img: "syrnyky" },
+  { id: "breakfast", name: "Сніданки та перекуси", short: "Перекуси", img: "hot-dogs" },
   { id: "dessert", name: "Випічка та десерти", short: "Випічка", img: "brownie" }
 ];
 

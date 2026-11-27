@@ -20,6 +20,7 @@
 ## Публікація
 - Сайт: https://sergiushp.github.io/aerogril/ (GitHub Pages з гілки `main`, репозиторій SergiusHp/aerogril).
 - Оновити сайт = commit + `git push`; Pages перезбирається сам за 1–2 хв. GitHub CLI: `~/.local/bin/gh`.
+- Після змін у css/js/data підніми номер `?v=` у `index.html` (усі 6 посилань), інакше телефони показують стару версію з кешу.
 - Локальний перегляд: python-сервер не має доступу до Робочого столу, тому копіюємо сайт у scratchpad (rsync) і запускаємо `.claude/launch.json` звідти.
 
 ## Економія токенів

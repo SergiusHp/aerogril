@@ -145,3 +145,29 @@ oversaturated, blurry, burnt, messy table, dark moody background, raw meat
 | Файл | Для чого | Опис |
 |---|---|---|
 | `cover.jpg` (1200×630) | Картинка-прев'ю, коли посилання надсилають у Viber/Telegram | Overhead flat lay of several air-fried dishes (chicken thighs, fries, roasted vegetables, salmon) on a warm cream linen table, terracotta accents, lots of negative space on the left for a title. |
+
+## 5. Партія 2: випічка й перекуси (12 страв)
+
+Правила ті самі: **загальний стиль** з розділу 2 + опис страви, файл кладіть у `img/dishes/` під іменем з таблиці. Коли закинете, напишіть **«продовж»**.
+
+### Сніданки та перекуси (7)
+
+| № | Страва | Файл | Опис страви (додати після стилю) |
+|---|---|---|---|
+| 61 | Хот-доги з хрусткою сосискою | `hot-dogs.jpg` | Two hot dogs in toasted golden buns, sausages with crispy blistered skin and diagonal scored cuts, zigzag of yellow mustard and ketchup, crispy fried onions and pickle slices on top. |
+| 62 | Сосиски в листковому тісті | `sausage-rolls.jpg` | Sausages wrapped in a spiral of golden flaky puff pastry, glossy egg-washed and sprinkled with sesame seeds, several on a plate, one cut in half showing the sausage. |
+| 63 | Хачапурі по-аджарськи | `khachapuri.jpg` | Georgian Adjarian khachapuri boat-shaped bread with golden puffy rim, filled with melted bubbling cheese, a runny egg yolk and a knob of butter in the centre. |
+| 64 | Піца на тортильї | `tortilla-pizza.jpg` | Thin crispy tortilla pizza with tomato sauce, melted mozzarella and salami slices, cut into four wedges, sprinkle of dried oregano. |
+| 65 | Кесадилья з куркою і сиром | `quesadilla.jpg` | Golden crispy chicken quesadilla cut into triangles and stacked, gooey melted cheese stretching, corn and red pepper visible, small bowl of sour cream. |
+| 66 | Часниковий багет | `garlic-bread.jpg` | Sliced baguette garlic bread with golden crisp edges, glistening garlic herb butter and fresh parsley, a few slices with melted cheese. |
+| 67 | Бейгли з йогурту | `yogurt-bagels.jpg` | Four homemade golden bagels topped with sesame seeds, one cut in half with cream cheese spread, rustic look. |
+
+### Випічка та десерти (5)
+
+| № | Страва | Файл | Опис страви |
+|---|---|---|---|
+| 68 | Заморожені круасани | `croissants.jpg` | Three freshly baked butter croissants with deep golden flaky layers, one torn open showing airy honeycomb interior, small dish of jam. |
+| 69 | Булочки-равлики з корицею | `cinnamon-rolls.jpg` | Soft cinnamon rolls with visible brown sugar cinnamon swirl, drizzled with white cream cheese glaze, in a small round baking dish. |
+| 70 | Слойки з яблуками | `apple-turnovers.jpg` | Golden puff pastry apple turnovers triangle-shaped with fork-pressed edges and two slits on top, a bit of caramelised apple filling peeking out, dusted with powdered sugar. |
+| 71 | Банановий хліб | `banana-bread.jpg` | Moist banana bread loaf with a cracked golden-brown top, two thick slices cut showing walnuts inside, a fresh banana beside it. |
+| 72 | Бананові пончики-кульки | `banana-donuts.jpg` | Small round banana donut holes rolled in cinnamon sugar, piled in a bowl, one broken open showing fluffy interior. |

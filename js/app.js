@@ -28,7 +28,7 @@
   const fmt = v => { const w = Math.floor(v), f = +(v - w).toFixed(2); return FR[f] ? (w ? w + FR[f] : FR[f]) : num(v); };
   const step = (v, s, min) => Math.max(min, Math.round(v / s) * s);
   const SEASON = /сіль|паприк|перець|часник сушен|часниковий|куркум|орегано|спеці|трав|кмин|кориц|соєвий|лимонний сік|оцет|гірчиц/i;
-  const HALVES = /лимон|цибул|помідор|перець солодкий|морква|кабач|баклажан|кукурудз|яблук/i;
+  const HALVES = /банан|лимон|цибул|помідор|перець солодкий|морква|кабач|баклажан|кукурудз|яблук/i;
   const FIXED = /для змащування|для подачі/i;
   function qty(name, q, unit, k) {
     if (!q) return "за смаком";
@@ -190,7 +190,7 @@
               ${r.whole ? `<span class="serv-fixed">${r.serv} ${plural(r.serv, "порція", "порції", "порцій")}</span>` : `<div class="stepper" aria-label="Кількість порцій"><button id="sm" aria-label="Менше порцій">−</button><span id="sv"></span><button id="sp" aria-label="Більше порцій">+</button></div>`}
             </div>
             <ul class="ing" id="ing"></ul>
-            <p class="ing-note" id="ingnote">${r.whole ? "Готується цілою тушкою, тому кількість не перераховується." : ""}</p>
+            <p class="ing-note" id="ingnote">${r.whole ? esc(r.whole) : ""}</p>
           </section>
           <section class="note done"><h3>Як зрозуміти, що готово</h3><p>${esc(r.done)}</p></section>
         </div>

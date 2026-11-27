@@ -22,15 +22,37 @@
   const hasFlip = r => r.flip && !/^—|^Не /.test(r.flip);
   const norm = s => s.toLowerCase().replace(/[ʼ'’]/g, "").replace(/ё/g, "е");
   const FR = { 0.25: "¼", 0.5: "½", 0.75: "¾" };
-  function qty(q, unit, k) {
+  // Перерахунок порцій «як на кухні»: яйця й шматки — цілі, овочі — до половинки,
+  // сіль і спеції ростуть повільніше за порції (k^0.8), «для змащування/подачі» не змінюються.
+  const num = v => String(+v.toFixed(2)).replace(".", ",");
+  const fmt = v => { const w = Math.floor(v), f = +(v - w).toFixed(2); return FR[f] ? (w ? w + FR[f] : FR[f]) : num(v); };
+  const step = (v, s, min) => Math.max(min, Math.round(v / s) * s);
+  const SEASON = /сіль|паприк|перець|часник сушен|часниковий|куркум|орегано|спеці|трав|кмин|кориц|соєвий|лимонний сік|оцет|гірчиц/i;
+  const HALVES = /лимон|цибул|помідор|перець солодкий|морква|кабач|баклажан|кукурудз|яблук/i;
+  const FIXED = /для змащування|для подачі/i;
+  function qty(name, q, unit, k) {
     if (!q) return "за смаком";
+    if (FIXED.test(name)) k = 1;
+    if (k > 1 && SEASON.test(name) && !/солодк/i.test(name)) k = k ** 0.8;
     let v = q * k;
-    if (/^(г|мл)$/.test(unit)) v = v >= 100 ? Math.round(v / 10) * 10 : Math.round(v);
-    else if (unit === "кг") v = Math.round(v * 100) / 100;
-    else v = Math.round(v * 4) / 4;
-    const whole = Math.floor(v), frac = +(v - whole).toFixed(2);
-    const txt = FR[frac] ? (whole ? whole + FR[frac] : FR[frac]) : String(v).replace(".", ",");
-    return `${txt} ${unit}`.trim();
+    switch (unit) {
+      case "г": case "мл":
+        v = v >= 100 ? step(v, 10, 10) : v >= 20 ? step(v, 5, 5) : step(v, 1, 1);
+        return v >= 1000 ? `${num(v / 1000)} ${unit === "г" ? "кг" : "л"}` : `${v} ${unit}`;
+      case "кг":
+        v = step(v, 0.05, 0.1);
+        return v < 1 ? `${Math.round(v * 1000)} г` : `${num(v)} кг`;
+      case "ч. л.":
+        if (v < 0.2) return "дрібка";
+        v = step(v, 0.25, 0.25); break;
+      case "ст. л.":
+        if (v < 0.75) { v = step(v * 3, 0.25, 0.25); unit = "ч. л."; } else v = step(v, 0.5, 0.5);
+        break;
+      case "шт": v = HALVES.test(name) ? step(v, 0.5, 0.5) : step(v, 1, 1); break;
+      case "банки": v = step(v, 0.5, 0.5); break;
+      default: v = step(v, 1, 1); // зубчики, скибки, гілочки
+    }
+    return `${fmt(v)} ${unit}`.trim();
   }
   // Власні фото (img/dishes/<id>.jpg) мають пріоритет над фото з Wikimedia Commons
   const LOCAL = new Set(window.LOCAL_IMAGES || []);
@@ -165,9 +187,10 @@
         <div class="stack">
           <section class="panel">
             <div class="panel-head"><h2>Інгредієнти</h2>
-              <div class="stepper" aria-label="Кількість порцій"><button id="sm" aria-label="Менше порцій">−</button><span id="sv"></span><button id="sp" aria-label="Більше порцій">+</button></div>
+              ${r.whole ? `<span class="serv-fixed">${r.serv} ${plural(r.serv, "порція", "порції", "порцій")}</span>` : `<div class="stepper" aria-label="Кількість порцій"><button id="sm" aria-label="Менше порцій">−</button><span id="sv"></span><button id="sp" aria-label="Більше порцій">+</button></div>`}
             </div>
             <ul class="ing" id="ing"></ul>
+            <p class="ing-note" id="ingnote">${r.whole ? "Готується цілою тушкою, тому кількість не перераховується." : ""}</p>
           </section>
           <section class="note done"><h3>Як зрозуміти, що готово</h3><p>${esc(r.done)}</p></section>
         </div>
@@ -200,12 +223,18 @@
       </div>`;
 
     const renderIng = () => {
-      app.querySelector("#sv").textContent = `${serv} ${plural(serv, "порція", "порції", "порцій")}`;
       app.querySelector("#ing").innerHTML = r.ing.map(([n, q, u], k) =>
-        `<li><label><input type="checkbox" id="i${k}"><span>${esc(n)}</span><span class="q">${esc(qty(q, u, serv / r.serv))}</span></label></li>`).join("");
+        `<li><label><input type="checkbox" id="i${k}"><span>${esc(n)}</span><span class="q">${esc(qty(n, q, u, serv / r.serv))}</span></label></li>`).join("");
+      if (r.whole) return;
+      app.querySelector("#sv").textContent = `${serv} ${plural(serv, "порція", "порції", "порцій")}`;
+      app.querySelector("#ingnote").textContent =
+        serv > r.serv ? `Сіль і спеції — трохи менше за пропорцію, досолюйте на смак. За раз у кошик: ${r.load}. Решту готуйте наступною партією, час той самий.`
+        : serv < r.serv ? "Яйця, шматки й зубчики округлено до цілих — так, як готують насправді. Час не змінюється." : "";
     };
-    app.querySelector("#sm").onclick = () => { if (serv > 1) { serv--; renderIng(); } };
-    app.querySelector("#sp").onclick = () => { if (serv < 20) { serv++; renderIng(); } };
+    if (!r.whole) {
+      app.querySelector("#sm").onclick = () => { if (serv > 1) { serv--; renderIng(); } };
+      app.querySelector("#sp").onclick = () => { if (serv < 20) { serv++; renderIng(); } };
+    }
     renderIng();
 
     app.querySelectorAll("[data-start]").forEach(b => b.onclick = () => Timer.start(r));
@@ -236,7 +265,7 @@
     s.textContent = JSON.stringify({
       "@context": "https://schema.org", "@type": "Recipe", name: r.title, image: srcOf(r.id) && new URL(srcOf(r.id), location.href).href,
       recipeCategory: catName[r.cat], recipeYield: `${r.serv} порції`, cookTime: `PT${r.time[1]}M`, keywords: r.tags.join(", "),
-      recipeIngredient: r.ing.map(([n, q, u]) => `${n} — ${qty(q, u, 1)}`),
+      recipeIngredient: r.ing.map(([n, q, u]) => `${n} — ${qty(n, q, u, 1)}`),
       recipeInstructions: r.steps.map(t => ({ "@type": "HowToStep", text: t })),
       tool: "Аерогриль", description: `${r.temp} °C, ${r.time[0]}–${r.time[1]} хв. ${r.why}`
     });

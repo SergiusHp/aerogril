@@ -146,6 +146,9 @@ main:focus{outline:none}
 .ing label{display:flex;gap:var(--s3);align-items:center;min-height:48px;cursor:pointer}
 .ing input{width:22px;height:22px;accent-color:var(--ok);flex:none}
 .ing .q{margin-left:auto;font-weight:700;white-space:nowrap;color:var(--ink-2)}
+.ing-note{margin:var(--s3) 0 0;font-size:14px;line-height:1.45;color:var(--ink-2)}
+.ing-note:empty{display:none}
+.serv-fixed{font-weight:700;font-size:14px;color:var(--ink-2)}
 .ing input:checked ~ span{text-decoration:line-through;color:var(--ink-2)}
 .steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:var(--s4)}
 .steps li{counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:var(--s3);font-size:18px;line-height:1.5}
